@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Treasure Ten Island — a safe, offline-friendly number lesson for about age 6. Make ten with ten-frames, number bonds, and story problems." />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Treasure Ten Island — Make Ten</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to lesson</a>
+  <div id="app" class="app">
+    <header class="topbar" role="banner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🏝️</span>
+        <div>
+          <p class="brand-kicker">Treasure Ten Island</p>
+          <h1 class="brand-title">Make Ten Adventure</h1>
+        </div>
+      </div>
+      <div class="top-controls">
+        <button type="button" id="btn-readaloud" class="btn btn-ghost" aria-pressed="false" title="Optional read-aloud (browser speech)">Read aloud: Off</button>
+        <button type="button" id="btn-scaffold" class="btn btn-ghost" aria-pressed="false" title="Extra help with counting tips">Help level: Light</button>
+        <button type="button" id="btn-reset-all" class="btn btn-ghost" title="Clear saved progress">Reset lesson</button>
+      </div>
+    </header>
+
+    <nav class="progress-nav" aria-label="Lesson progress">
+      <ol id="progress-steps" class="progress-steps">
+        <li><button type="button" class="step-btn" data-screen="home" aria-current="page">Start</button></li>
+        <li><button type="button" class="step-btn" data-screen="quantity" disabled>1 · Build</button></li>
+        <li><button type="button" class="step-btn" data-screen="maketen" disabled>2 · Make Ten</button></li>
+        <li><button type="button" class="step-btn" data-screen="stories" disabled>3 · Stories</button></li>
+        <li><button type="button" class="step-btn" data-screen="summary" disabled>Done</button></li>
+      </ol>
+    </nav>
+
+    <main id="main" class="main" tabindex="-1">
+      <!-- HOME -->
+      <section id="screen-home" class="screen" data-screen="home" aria-labelledby="home-title">
+        <div class="hero card">
+          <h2 id="home-title">Welcome, treasure explorer!</h2>
+          <p class="lede">Today we will learn how numbers from <strong>0 to 10</strong> match groups of shells, and how two parts can <strong>make ten</strong>.</p>
+          <ul class="checklist">
+            <li>Build amounts on a ten-frame</li>
+            <li>Complete number bonds to 10</li>
+            <li>Solve friendly story problems with counters</li>
+          </ul>
+          <p class="hint-line">Session: about 8–12 minutes. No rush. You can retry any time.</p>
+          <div class="demo-box" aria-label="Quick demonstration">
+            <p><strong>Quick demo:</strong> This ten-frame has 4 shells. Four more empty spaces would make ten.</p>
+            <div class="tenframe demo" aria-hidden="true" data-filled="4"></div>
+            <p class="sr-only">Demo ten-frame showing four filled slots and six empty slots.</p>
+          </div>
+          <button type="button" id="btn-start" class="btn btn-primary btn-xl">Start adventure</button>
+        </div>
+      </section>
+
+      <!-- ACTIVITY 1: QUANTITY -->
+      <section id="screen-quantity" class="screen hidden" data-screen="quantity" aria-labelledby="qty-title" hidden>
+        <div class="card">
+          <h2 id="qty-title">Activity 1 · Build a quantity</h2>
+          <p id="qty-prompt" class="prompt" aria-live="polite">Put shells on the ten-frame to match the number.</p>
+          <div class="target-row">
+            <div class="numeral-badge" id="qty-numeral" aria-label="Target number">0</div>
+            <p class="target-words" id="qty-words">zero</p>
+          </div>
+          <div class="scaffold-tip hidden" id="qty-scaffold" role="note"></div>
+          <div class="tenframe-wrap">
+            <div id="qty-frame" class="tenframe" role="group" aria-label="Ten-frame with ten slots"></div>
+            <p class="count-line" id="qty-count" aria-live="polite">Shells on the frame: 0</p>
+          </div>
+          <div class="controls-row">
+            <button type="button" id="qty-add" class="btn btn-primary">Add shell</button>
+            <button type="button" id="qty-remove" class="btn">Remove shell</button>
+            <button type="button" id="qty-clear" class="btn btn-ghost">Clear frame</button>
+            <button type="button" id="qty-check" class="btn btn-accent">Check</button>
+            <button type="button" id="qty-hint" class="btn btn-ghost">Hint</button>
+          </div>
+          <div id="qty-feedback" class="feedback" role="status" aria-live="polite"></div>
+          <div class="table-alt">
+            <h3 class="visually-quiet">Table view of the frame</h3>
+            <table id="qty-table" class="slot-table" aria-label="Ten-frame slots as a table">
+              <caption>Slots 1–10 (filled or empty)</caption>
+              <thead><tr><th scope="col">Slot</th><th scope="col">Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="progress-mini" id="qty-progress">Round 1 of 5</p>
+          <button type="button" id="qty-next" class="btn btn-primary hidden" disabled>Next activity →</button>
+        </div>
+      </section>
+
+      <!-- ACTIVITY 2: MAKE TEN -->
+      <section id="screen-maketen" class="screen hidden" data-screen="maketen" aria-labelledby="mt-title" hidden>
+        <div class="card">
+          <h2 id="mt-title">Activity 2 · Make ten</h2>
+          <p id="mt-prompt" class="prompt" aria-live="polite">This side already has some shells. Add shells so both parts make ten.</p>
+          <div class="bond-display" aria-live="polite">
+            <span id="mt-part-a" class="bond-part">7</span>
+            <span aria-hidden="true">+</span>
+            <span id="mt-part-b" class="bond-part editable">?</span>
+            <span aria-hidden="true">=</span>
+            <span class="bond-part whole">10</span>
+          </div>
+          <div class="scaffold-tip hidden" id="mt-scaffold" role="note"></div>
+          <div class="dual-frames">
+            <div>
+              <p class="frame-label" id="mt-label-a">Starting shells (locked)</p>
+              <div id="mt-frame-a" class="tenframe locked" role="img" aria-label="Starting collection"></div>
+            </div>
+            <div>
+              <p class="frame-label" id="mt-label-b">Your shells</p>
+              <div id="mt-frame-b" class="tenframe" role="group" aria-label="Your part of the ten-frame"></div>
+            </div>
+          </div>
+          <p class="count-line" id="mt-count" aria-live="polite">Your shells: 0 · Together: 7</p>
+          <div class="controls-row">
+            <button type="button" id="mt-add" class="btn btn-primary">Add shell</button>
+            <button type="button" id="mt-remove" class="btn">Remove shell</button>
+            <button type="button" id="mt-clear" class="btn btn-ghost">Clear your shells</button>
+            <button type="button" id="mt-check" class="btn btn-accent">Check</button>
+            <button type="button" id="mt-hint" class="btn btn-ghost">Hint</button>
+          </div>
+          <div id="mt-feedback" class="feedback" role="status" aria-live="polite"></div>
+          <div class="table-alt">
+            <table id="mt-table" class="slot-table" aria-label="Your shells as a table">
+              <caption>Your slots</caption>
+              <thead><tr><th scope="col">Slot</th><th scope="col">Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="progress-mini" id="mt-progress">Bond 1 of 5</p>
+          <button type="button" id="mt-next" class="btn btn-primary hidden" disabled>Next activity →</button>
+        </div>
+      </section>
+
+      <!-- ACTIVITY 3: STORIES -->
+      <section id="screen-stories" class="screen hidden" data-screen="stories" aria-labelledby="st-title" hidden>
+        <div class="card">
+          <h2 id="st-title">Activity 3 · Story problems</h2>
+          <p id="st-prompt" class="prompt story-text" aria-live="polite"></p>
+          <div class="picture-model" id="st-picture" aria-hidden="true"></div>
+          <p class="equation-line" id="st-equation" aria-live="polite">Equation: ?</p>
+          <div class="scaffold-tip hidden" id="st-scaffold" role="note"></div>
+          <div class="tenframe-wrap">
+            <div id="st-frame" class="tenframe" role="group" aria-label="Counters for the story"></div>
+            <p class="count-line" id="st-count" aria-live="polite">Counters: 0</p>
+          </div>
+          <div class="controls-row">
+            <button type="button" id="st-add" class="btn btn-primary">Add counter</button>
+            <button type="button" id="st-remove" class="btn">Remove counter</button>
+            <button type="button" id="st-clear" class="btn btn-ghost">Clear</button>
+            <button type="button" id="st-check" class="btn btn-accent">Check</button>
+            <button type="button" id="st-hint" class="btn btn-ghost">Hint</button>
+          </div>
+          <div id="st-feedback" class="feedback" role="status" aria-live="polite"></div>
+          <p class="progress-mini" id="st-progress">Story 1 of 7</p>
+          <button type="button" id="st-next" class="btn btn-primary hidden" disabled>See summary →</button>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section id="screen-summary" class="screen hidden" data-screen="summary" aria-labelledby="sum-title" hidden>
+        <div class="card hero">
+          <h2 id="sum-title">Treasure found! 🎉</h2>
+          <p class="lede">You practiced matching numbers to quantities, making ten in different ways, and solving story problems within ten.</p>
+          <ul id="sum-list" class="checklist"></ul>
+          <p><strong>Next practice idea:</strong> With ten buttons or pebbles at home, ask: “I have 6 — how many more to make 10?”</p>
+          <div class="controls-row">
+            <button type="button" id="btn-replay" class="btn btn-primary">Play again</button>
+            <button type="button" id="btn-home" class="btn">Back to start</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <p>Child-safe static lesson · No login, ads, tracking, or wallets · Progress stays in this browser only · <a href="EDUCATOR_GUIDE.md">Educator guide</a> · <a href="README.md">README</a></p>
+    </footer>
+  </div>
+  <script src="content.js"></script>
+  <script src="domain.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
